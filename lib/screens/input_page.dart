@@ -1,9 +1,13 @@
+import 'package:bmi_calculator_flutter/calculator_brain.dart';
 import 'package:bmi_calculator_flutter/constants.dart';
+import 'package:bmi_calculator_flutter/screens/results_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'icon_content.dart';
-import 'reusable_card.dart';
+import '../components/bottom_button.dart';
+import '../components/icon_content.dart';
+import '../components/reusable_card.dart';
+import '../components/round_icon_button.dart';
 
 class InputPage extends StatefulWidget {
   const InputPage({super.key});
@@ -151,7 +155,7 @@ class _InputPageState extends State<InputPage> {
                                 });
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             RoundIconButton(
@@ -193,7 +197,9 @@ class _InputPageState extends State<InputPage> {
                                 });
                               },
                             ),
-                            SizedBox(width: 10,),
+                            const SizedBox(
+                              width: 10,
+                            ),
                             RoundIconButton(
                               icon: FontAwesomeIcons.plus,
                               handleOnPressed: () {
@@ -211,34 +217,26 @@ class _InputPageState extends State<InputPage> {
               ],
             ),
           ),
-          Container(
-            color: kBottomContainerColor,
-            margin: const EdgeInsets.only(top: 10),
-            width: double.infinity,
-            height: kBottomContainerHeight,
-          ),
+          BottomButton(
+              label: 'calculate',
+              handleOnTap: () {
+                CalculatorBrain calc = CalculatorBrain(
+                  height: height,
+                  weight: weight,
+                );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ResultsPage(
+                      bmiResult: calc.calculateBMI(),
+                      resultText: calc.getResult(),
+                      interpretation: calc.getInterpretation(),
+                    ),
+                  ),
+                );
+              })
         ],
       ),
-    );
-  }
-}
-
-class RoundIconButton extends StatelessWidget {
-  const RoundIconButton(
-      {super.key, required this.icon, required this.handleOnPressed});
-
-  final VoidCallback handleOnPressed;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      onPressed: handleOnPressed,
-      elevation: 0,
-      constraints: BoxConstraints.tightFor(width: 56, height: 56),
-      shape: CircleBorder(),
-      fillColor: Color(0xFF4C4F5E),
-      child: Icon(icon),
     );
   }
 }
